@@ -4,7 +4,9 @@ int main(int argc, char **argv)
 {
 	WNDCLASSEX wClass;
 	MSG msg;
+	UINT_PTR timer;
 
+	srand((unsigned int)time(NULL));
 
 	ZeroMemory(&wClass, sizeof(WNDCLASSEX));
 	wClass.cbSize = sizeof(WNDCLASSEX);
@@ -34,13 +36,22 @@ int main(int argc, char **argv)
 
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow (hWnd);
+	if(!(timer = SetTimer(hWnd, UPDATE_SCENE, 100, NULL)))
+	{
+		puts("Error timer()");
+	}
+
 	ZeroMemory(&msg, sizeof(MSG));
 
 	while(GetMessage(&msg,NULL,0,0))
 	{
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-		drawScene();
+	}
+
+	if(!KillTimer(hWnd, timer))
+	{
+		puts("Error KillTImer()");
 	}
 
 	if(!UnregisterClass(GL_TEST_CLASS_NAME, NULL))
@@ -76,6 +87,21 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		EndPaint(hWnd, &ps); 
 		break; 
 
+	case WM_TIMER: 
+		switch(wParam)
+		{
+		case UPDATE_SCENE:
+			{
+				drawScene();
+			}
+			break;
+
+
+		default:
+			break;
+		}
+		break; 
+
 	case WM_CREATE: 
 		{
 			puts("Window created");
@@ -103,6 +129,11 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			{
 				puts("error wglMakeCurrent");
 			}
+
+			glClearColor(0.0, 0.0, 0.0, 0.0);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
 		}
 		break;
 
@@ -146,7 +177,7 @@ BOOL bSetupPixelFormat(HDC hdc)
 
 	pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR); 
 	pfd.nVersion = 1; 
-	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER; 
+	pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;// | PFD_DOUBLEBUFFER; 
 	pfd.dwLayerMask = PFD_MAIN_PLANE; 
 	pfd.iPixelType = PFD_TYPE_COLORINDEX; 
 	pfd.cColorBits = 8; 
@@ -171,8 +202,23 @@ BOOL bSetupPixelFormat(HDC hdc)
 
 GLvoid drawScene() 
 { 
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-	glClear(GL_COLOR_BUFFER_BIT);
+ //   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+	draw_square();
 	glFlush();
-	SwapBuffers(ghDC); 
+	//SwapBuffers(ghDC); 
+}
+
+GLvoid draw_square()
+{
+	GLfloat x = 1.0/((float)(rand()%100)), 
+		y = 1.0/((float)(rand()%100)), 
+		l = 1.0/((float)(rand()%100));
+
+	glColor3f(1.0/((float)(rand()%10)), 1.0/((float)(rand()%10)), 1.0/((float)(rand()%10)));
+	glBegin(GL_POLYGON);
+	glVertex3f(x, y, 0.0);
+	glVertex3f(x+l, y, 0.0);
+	glVertex3f(x+l, y+l, 0.0);
+	glVertex3f(x, y+l, 0.0);
+	glEnd();
 }
