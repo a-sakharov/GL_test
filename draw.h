@@ -7,6 +7,14 @@
 #include "glext.h"
 
 
+#define LOADOPENGLPROC(type, name)\
+name = (type)wglGetProcAddress(#name);\
+if (!name)\
+{\
+print_error("Cannot load opengl proc" #name);\
+exit(-1);\
+}
+
 PFNGLSHADERSOURCEARBPROC glShaderSource;
 PFNGLCREATESHADERPROC glCreateShader;
 PFNGLCOMPILESHADERPROC glCompileShader;
@@ -30,5 +38,5 @@ void cleanup();
 void update();
 void init();
 extern void swap_buffers();
-
+extern void print_error(char *state);
 #endif

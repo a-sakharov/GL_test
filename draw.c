@@ -28,19 +28,19 @@ void init()
 			"} \n"
 	};
 
-	glShaderSource = (PFNGLSHADERSOURCEARBPROC)wglGetProcAddress("glShaderSource");
-	glCreateShader = (PFNGLCREATESHADERPROC)wglGetProcAddress("glCreateShader");
-	glCompileShader = (PFNGLCOMPILESHADERPROC)wglGetProcAddress("glCompileShader");
-	glAttachShader = (PFNGLATTACHSHADERPROC)wglGetProcAddress("glAttachShader");
-	glLinkProgram = (PFNGLLINKPROGRAMPROC)wglGetProcAddress("glLinkProgram");
-	glDeleteShader = (PFNGLDELETESHADERPROC)wglGetProcAddress("glDeleteShader");
-	glCreateProgram = (PFNGLCREATEPROGRAMPROC)wglGetProcAddress("glCreateProgram");
-	glGenVertexArrays = (PFNGLGENVERTEXARRAYSPROC)wglGetProcAddress("glGenVertexArrays");
-	glBindVertexArray = (PFNGLBINDVERTEXARRAYAPPLEPROC)wglGetProcAddress("glBindVertexArray");
-	glClearBufferfv = (PFNGLCLEARBUFFERFVPROC)wglGetProcAddress("glClearBufferfv");
-	glUseProgram = (PFNGLUSEPROGRAMPROC)wglGetProcAddress("glUseProgram");
-	glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC)wglGetProcAddress("glDeleteVertexArrays");
-	glDeleteProgram = (PFNGLDELETEPROGRAMPROC)wglGetProcAddress("glDeleteProgram");
+	LOADOPENGLPROC(PFNGLSHADERSOURCEARBPROC, glShaderSource);
+	LOADOPENGLPROC(PFNGLCREATESHADERPROC, glCreateShader);
+	LOADOPENGLPROC(PFNGLCOMPILESHADERPROC, glCompileShader);
+	LOADOPENGLPROC(PFNGLATTACHSHADERPROC, glAttachShader);
+	LOADOPENGLPROC(PFNGLLINKPROGRAMPROC, glLinkProgram);
+	LOADOPENGLPROC(PFNGLDELETESHADERPROC, glDeleteShader);
+	LOADOPENGLPROC(PFNGLCREATEPROGRAMPROC, glCreateProgram);
+	LOADOPENGLPROC(PFNGLGENVERTEXARRAYSPROC, glGenVertexArrays);
+	LOADOPENGLPROC(PFNGLBINDVERTEXARRAYAPPLEPROC, glBindVertexArray);
+	LOADOPENGLPROC(PFNGLCLEARBUFFERFVPROC, glClearBufferfv);
+	LOADOPENGLPROC(PFNGLUSEPROGRAMPROC, glUseProgram);
+	LOADOPENGLPROC(PFNGLDELETEVERTEXARRAYSPROC, glDeleteVertexArrays);
+	LOADOPENGLPROC(PFNGLDELETEPROGRAMPROC, glDeleteProgram);
 
 	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
