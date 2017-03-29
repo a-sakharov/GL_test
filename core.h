@@ -1,29 +1,33 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __CORE_H__
+#define __CORE_H__
+
 
 //pre-include definitions
 #ifndef UNICODE
 #define UNICODE
 #endif
 
+
 //libraries
 #pragma comment (lib, "Opengl32.lib")
 
-//inclused
+
+//includes
 #include <Windows.h>
 #include <time.h>
 #include <stdio.h>
-#include <gl\GL.h>
+#include <gl/GL.h>
+#include "core.h"
 
-//definiions
-#define GL_TEST_CLASS_NAME	(L"gl_test class")
-#define HEIGHT				(480)
-#define WIDTH				(640)
-#define UPDATE_SCENE		(0x01)
+
+//definitions
+#define WINDOW_CLASS_NAME	(L"gl_test class")
+#define HEIGHT				(500)
+#define WIDTH				(500)
+
 
 //global variables
 HINSTANCE hInst = NULL;
-HWND hWnd;
 HDC ghDC;
 HGLRC ghRC;
 
@@ -31,7 +35,7 @@ HGLRC ghRC;
 //function declarations
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL bSetupPixelFormat(HDC hdc);
-GLvoid drawScene();
-GLvoid draw_square();
+void print_error(char *state);
+BOOL swap_buffers();
 
 #endif
