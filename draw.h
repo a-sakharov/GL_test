@@ -3,16 +3,23 @@
 
 
 #include <windows.h>
+#include <stdio.h>
 #include <gl\GL.h>
 #include "glext.h"
 
 
 #define LOADOPENGLPROC(type, name)\
-name = (type)wglGetProcAddress(#name);\
-if (!name)\
+if (!(name = (type)wglGetProcAddress(#name)))\
 {\
 print_error("Cannot load opengl proc" #name);\
 exit(-1);\
+}
+
+#define LOADSHADERFROMFILE(destination, filename)\
+if (!(destination = load_shader_code(filename)))\
+{\
+	print_error("Cannot load shader " filename);\
+	exit(-1);\
 }
 
 PFNGLSHADERSOURCEARBPROC glShaderSource;
@@ -37,6 +44,7 @@ GLuint vertex_array_object;
 void cleanup();
 void update();
 void init();
+GLchar *load_shader_code(char *filename);
 extern void swap_buffers();
 extern void print_error(char *state);
 #endif
