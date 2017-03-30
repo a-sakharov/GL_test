@@ -75,7 +75,7 @@ void update()
 void cleanup()
 {
 	glDeleteVertexArrays(1, &vertex_array_object);
-	glDeleteProgram(rendering_program);
+	glDeleteProgram(rendering_program);				//тут зависает при выключении
 	glDeleteVertexArrays(1, &vertex_array_object);
 }
 

@@ -24,12 +24,13 @@
 #define WINDOW_CLASS_NAME	(L"gl_test class")
 #define HEIGHT				(500)
 #define WIDTH				(500)
-#define TIMER_60HZ			(1)
+#define TIMER_UPDATE		(1)
 
 //global variables
 HINSTANCE hInst;
 HDC ghDC;
 HGLRC ghRC;
+UINT_PTR timer;
 
 
 //function declarations

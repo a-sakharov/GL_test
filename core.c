@@ -5,7 +5,6 @@ int main(int argc, char **argv)
 	WNDCLASSEX wClass;
 	MSG msg;
 	HWND hWnd;
-	UINT_PTR timer;
 
 	srand((unsigned int)time(NULL));
 
@@ -40,7 +39,7 @@ int main(int argc, char **argv)
 
 	ZeroMemory(&msg, sizeof(MSG));
 
-	if(!(timer = SetTimer(hWnd, TIMER_60HZ, 1000 / 60, NULL)))
+	if(!(timer = SetTimer(hWnd, TIMER_UPDATE, 1000 / 100, NULL)))
 	{
 		print_error("Timer creation failed");
 		return -1;
@@ -49,13 +48,7 @@ int main(int argc, char **argv)
 	while(GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);update();
-	}
-
-	if(!KillTimer(hWnd, timer))
-	{
-		print_error("Timer kill failed");
-		return -1;
+		DispatchMessage(&msg);
 	}
 
 	if(!UnregisterClass(WINDOW_CLASS_NAME, NULL))
@@ -82,9 +75,9 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_TIMER:
 		{
-			switch(lParam)
+			switch(wParam)
 			{
-			case TIMER_60HZ:
+			case TIMER_UPDATE:
 				{
 					update();
 				}
@@ -131,6 +124,15 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		{
 			puts("Window destroed");
+
+			if(timer)
+			{
+				if(!KillTimer(hWnd, timer))
+				{
+					print_error("Timer kill failed");
+					return -1;
+				}
+			}
 
 			if (ghRC)
 			{
