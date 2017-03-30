@@ -5,6 +5,8 @@
 
 #include <windows.h>
 #include <stdio.h>
+#include <math.h>
+#include <time.h>
 #include <gl\GL.h>
 #include "glext.h"
 
@@ -23,6 +25,7 @@ if (!(destination = load_shader_code(filename)))\
 	exit(-1);\
 }
 
+
 PFNGLSHADERSOURCEARBPROC glShaderSource;
 PFNGLCREATESHADERPROC glCreateShader;
 PFNGLCOMPILESHADERPROC glCompileShader;
@@ -36,6 +39,7 @@ PFNGLCLEARBUFFERFVPROC glClearBufferfv;
 PFNGLUSEPROGRAMPROC glUseProgram;
 PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
 PFNGLDELETEPROGRAMPROC glDeleteProgram;
+PFNGLVERTEXATTRIB4FVPROC glVertexAttrib4fv;
 
 
 GLuint rendering_program;
@@ -48,4 +52,5 @@ void init();
 GLchar *load_shader_code(char *filename);
 extern void swap_buffers();
 extern void print_error(char *state);
+double get_msec_time();
 #endif

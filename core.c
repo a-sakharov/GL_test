@@ -5,6 +5,7 @@ int main(int argc, char **argv)
 	WNDCLASSEX wClass;
 	MSG msg;
 	HWND hWnd;
+	UINT_PTR timer;
 
 	srand((unsigned int)time(NULL));
 
@@ -39,11 +40,22 @@ int main(int argc, char **argv)
 
 	ZeroMemory(&msg, sizeof(MSG));
 
+	if(!(timer = SetTimer(hWnd, TIMER_60HZ, 1000 / 60, NULL)))
+	{
+		print_error("Timer creation failed");
+		return -1;
+	}
+
 	while(GetMessage(&msg, NULL, 0, 0))
 	{
 		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-		update();
+		DispatchMessage(&msg);update();
+	}
+
+	if(!KillTimer(hWnd, timer))
+	{
+		print_error("Timer kill failed");
+		return -1;
 	}
 
 	if(!UnregisterClass(WINDOW_CLASS_NAME, NULL))
@@ -67,6 +79,22 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			EndPaint(hWnd, &ps);
 		}
 		break; 
+
+	case WM_TIMER:
+		{
+			switch(lParam)
+			{
+			case TIMER_60HZ:
+				{
+					update();
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+		break;
 
 	case WM_CREATE: 
 		{
@@ -137,6 +165,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return result;
 }
 
+
 BOOL bSetupPixelFormat(HDC hdc) 
 { 
 	PIXELFORMATDESCRIPTOR pfd; 
@@ -176,12 +205,12 @@ void print_error(char *state)
 		error_description_oem = (char*)malloc(strlen(error_description) + 1);
 		CharToOemA(error_description, error_description_oem);
 		HeapFree(GetProcessHeap(), 0, error_description);
-		fprintf(stderr, "%s, winerr %d: %s", state, error, error_description_oem);
+		fprintf(stderr, "%s, winerr %u: %s", state, error, error_description_oem);
 		free(error_description_oem);
 	}
 	else
 	{
-		fprintf(stderr, "%s, winerr %d (FormatMessageA fail with winerr %d)", state, error, GetLastError());
+		fprintf(stderr, "%s, winerr %u (FormatMessageA fail with winerr %u)", state, error, GetLastError());
 	}
 }
 
