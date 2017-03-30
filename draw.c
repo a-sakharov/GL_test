@@ -44,16 +44,16 @@ void init()
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
-	glGenVertexArrays(1, &vertex_array_object);
+	glGenVertexArrays(3, &vertex_array_object);
 	glBindVertexArray(vertex_array_object);
 }
 
 void update()
 {
-	const GLfloat color[] = {1.0, 0.0, 0.0, 1.0};
+	const GLfloat color[] = {0.8, 0.0, 0.0, 1.0};
 	glClearBufferfv(GL_COLOR, 0, color);
 	glUseProgram(rendering_program);
-	glDrawArrays(GL_POINTS, 0, 1);
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 	swap_buffers();
 }
 

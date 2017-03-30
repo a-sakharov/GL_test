@@ -120,7 +120,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}
 			}
 
-			cleanup(hWnd);
+			cleanup();
 
 			PostQuitMessage(0);
 			return 0;
