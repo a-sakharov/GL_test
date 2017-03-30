@@ -37,5 +37,7 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL bSetupPixelFormat(HDC hdc);
 void print_error(char *state);
 BOOL swap_buffers();
-
+extern void cleanup();
+extern void update();
+extern void init();
 #endif
