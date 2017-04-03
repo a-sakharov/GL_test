@@ -68,6 +68,7 @@ void update()
 	glClearBufferfv(GL_COLOR, 0, color);
 	glUseProgram(rendering_program);
 	glVertexAttrib4fv(0, attrib);
+	glVertexAttrib4fv(1, attrib);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 	swap_buffers();
 }
