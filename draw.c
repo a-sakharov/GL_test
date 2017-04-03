@@ -7,16 +7,19 @@ void init()
 	GLuint fragment_shader;
 	GLuint tessellation_control_shader;
 	GLuint tessellation_evaluation_shader;
+	GLuint geometry_shader;
 
 	GLchar *vertex_shader_source;
 	GLchar *fragment_shader_source;
 	GLchar *tessellation_control_shader_source;
 	GLchar *tessellation_evaluation_shader_source;
+	GLchar *geometry_shader_source;
 	
 	LOADSHADERFROMFILE(vertex_shader_source, "vertex.glsl");
 	LOADSHADERFROMFILE(fragment_shader_source, "fragment.glsl");
 	LOADSHADERFROMFILE(tessellation_control_shader_source, "tessellation_control.glsl");
 	LOADSHADERFROMFILE(tessellation_evaluation_shader_source, "tessellation_evaluation.glsl");
+	LOADSHADERFROMFILE(geometry_shader_source, "geometry.glsl");
 
 	LOADOPENGLPROC(PFNGLSHADERSOURCEARBPROC, glShaderSource);
 	LOADOPENGLPROC(PFNGLCREATESHADERPROC, glCreateShader);
@@ -54,27 +57,36 @@ void init()
 	glShaderSource(tessellation_evaluation_shader, 1, &tessellation_evaluation_shader_source, NULL);
 	glCompileShader(tessellation_evaluation_shader);
 	free(tessellation_evaluation_shader_source);
+
+	geometry_shader = glCreateShader(GL_GEOMETRY_SHADER);
+	glShaderSource(geometry_shader, 1, &geometry_shader_source, NULL);
+	glCompileShader(geometry_shader);
+	free(geometry_shader_source);
 	
 	rendering_program = glCreateProgram();
 	glAttachShader(rendering_program, vertex_shader);
 	glAttachShader(rendering_program, fragment_shader);
 	glAttachShader(rendering_program, tessellation_control_shader);
 	glAttachShader(rendering_program, tessellation_evaluation_shader);
+	glAttachShader(rendering_program, geometry_shader);
 	glLinkProgram(rendering_program);
 
 	glDetachShader(rendering_program, vertex_shader);
 	glDetachShader(rendering_program, fragment_shader);
 	glDetachShader(rendering_program, tessellation_control_shader);
 	glDetachShader(rendering_program, tessellation_evaluation_shader);
+	glDetachShader(rendering_program, geometry_shader);
 
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 	glDeleteShader(tessellation_control_shader);
 	glDeleteShader(tessellation_evaluation_shader);
+	glDeleteShader(geometry_shader);
 
 	glGenVertexArrays(1, &vertex_array_object);
 	glBindVertexArray(vertex_array_object);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPointSize(1.5);
 }
 
 void update()
