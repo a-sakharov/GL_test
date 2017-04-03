@@ -40,11 +40,11 @@ PFNGLUSEPROGRAMPROC glUseProgram;
 PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
 PFNGLDELETEPROGRAMPROC glDeleteProgram;
 PFNGLVERTEXATTRIB4FVPROC glVertexAttrib4fv;
-
+PFNGLPATCHPARAMETERIPROC glPatchParameteri;
+PFNGLDETACHSHADERPROC glDetachShader;
 
 GLuint rendering_program;
 GLuint vertex_array_object;
-
 
 void cleanup();
 void update();
