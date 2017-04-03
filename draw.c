@@ -51,16 +51,18 @@ void init()
 
 void update()
 {
+	double time = get_msec_time();
+
 	GLfloat color[] = { 
-		(float)sin((double)get_msec_time()) * 0.5f + 0.5f, 
-		(float)cos((double)get_msec_time()) * 0.5f + 0.5f, 
+		(float)sin(time) * 0.5f + 0.5f, 
+		(float)cos(time) * 0.5f + 0.5f, 
 		0.0f, 
 		1.0f 
 	};
 
 	GLfloat attrib[] = {
-		(float)sin((double)get_msec_time()) * 0.5f, 
-		(float)cos((double)get_msec_time()) * 0.6f, 
+		(float)sin(time) * 0.5f, 
+		(float)cos(time) * 0.6f, 
 		0.0f, 
 		0.0f 
 	};
