@@ -3,6 +3,8 @@
 
 void init()
 {
+	GLint extensions_count = 0;
+
 	GLuint vertex_shader;
 	GLuint fragment_shader;
 	GLuint tessellation_control_shader;
@@ -37,6 +39,7 @@ void init()
 	LOADOPENGLPROC(PFNGLVERTEXATTRIB4FVPROC, glVertexAttrib4fv);
 	LOADOPENGLPROC(PFNGLPATCHPARAMETERIPROC, glPatchParameteri);
 	LOADOPENGLPROC(PFNGLDETACHSHADERPROC, glDetachShader);
+	LOADOPENGLPROC(PFNGLGETSTRINGIPROC, glGetStringi);
 
 	vertex_shader = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
@@ -87,6 +90,14 @@ void init()
 	glBindVertexArray(vertex_array_object);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPointSize(1.5);
+
+	puts("Extensions list:");
+	glGetIntegerv(GL_NUM_EXTENSIONS, &extensions_count);
+	for(; extensions_count; extensions_count--)
+	{
+		putchar('\t');
+		puts((char*)glGetStringi(GL_EXTENSIONS, extensions_count-1));
+	}
 }
 
 void update()
