@@ -19,7 +19,7 @@ exit(-1);\
 }
 
 #define LOADSHADERFROMFILE(destination, filename)\
-if (!(destination = load_shader_code(filename)))\
+if (!(destination = LoadFromFile(filename)))\
 {\
 	print_error("Cannot load shader " filename);\
 	exit(-1);\
@@ -50,8 +50,8 @@ GLuint vertex_array_object;
 void cleanup();
 void update();
 void init();
-GLchar *load_shader_code(char *filename);
+GLchar *LoadFromFile(char *filename);
 extern void swap_buffers();
 extern void print_error(char *state);
-double get_msec_time();
+double GetSecMsecTime();
 #endif

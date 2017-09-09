@@ -3,7 +3,9 @@
 
 void init()
 {
-	GLint extensions_count = 0;
+	GLint count = 0;
+	GLint major_version = 0;
+	GLint minor_version = 0;
 
 	GLuint vertex_shader;
 	GLuint fragment_shader;
@@ -91,18 +93,34 @@ void init()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glPointSize(1.5);
 
-	puts("Extensions list:");
-	glGetIntegerv(GL_NUM_EXTENSIONS, &extensions_count);
-	for(; extensions_count; extensions_count--)
+	printf("Version string:\n\t%s\n", glGetString(GL_VERSION));
+	glGetIntegerv(GL_MAJOR_VERSION, &major_version);
+	glGetIntegerv(GL_MINOR_VERSION, &minor_version);
+	printf("Version decimal:\n\t%d.%d\n", major_version, minor_version);
+	printf("Vendor:\n\t%s\n", glGetString(GL_VENDOR));
+	printf("Renderer:\n\t%s\n", glGetString(GL_RENDERER));
+	printf("GLSL:\n\t%s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+
+	puts("Supported GLSL versions:");
+	glGetIntegerv(GL_NUM_SHADING_LANGUAGE_VERSIONS, &count);
+	for (; count; count--)
 	{
 		putchar('\t');
-		puts((char*)glGetStringi(GL_EXTENSIONS, extensions_count-1));
+		puts((char*)glGetStringi(GL_SHADING_LANGUAGE_VERSION, count - 1));
+	}
+
+	puts("Extensions list:");
+	glGetIntegerv(GL_NUM_EXTENSIONS, &count);
+	for(; count; count--)
+	{
+		putchar('\t');
+		puts((char*)glGetStringi(GL_EXTENSIONS, count - 1));
 	}
 }
 
 void update()
 {
-	double time = get_msec_time();
+	double time = GetSecMsecTime();
 
 	GLfloat color[] = { 
 		(float)sin(time) * 0.5f + 0.5f, 
@@ -131,7 +149,7 @@ void cleanup()
 	glDeleteProgram(rendering_program);				//тут зависает при выключении
 }
 
-GLchar *load_shader_code(char *filename)
+GLchar *LoadFromFile(char *filename)
 {
 	FILE *file;
 	long int size;
@@ -157,8 +175,7 @@ GLchar *load_shader_code(char *filename)
 	return result;
 }
 
-
-double get_msec_time()
+double GetSecMsecTime()
 {
 	SYSTEMTIME systemtime;
 	
