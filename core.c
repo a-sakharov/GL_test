@@ -1,4 +1,16 @@
 #include "core.h"
+#include "draw.h"
+#include <Windows.h>
+#include <time.h>
+#include <stdio.h>
+#include <gl/GL.h>
+
+#pragma comment (lib, "Opengl32.lib")
+
+HINSTANCE hInst;
+HDC ghDC;
+HGLRC ghRC;
+UINT_PTR timer;
 
 int main(int argc, char **argv)
 {
@@ -167,7 +179,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return result;
 }
 
-
 BOOL bSetupPixelFormat(HDC hdc) 
 { 
 	PIXELFORMATDESCRIPTOR pfd; 
@@ -219,4 +230,39 @@ void print_error(char *state)
 BOOL swap_buffers()
 {
 	return SwapBuffers(ghDC);
+}
+
+char *LoadFromFile(char *filename)
+{
+    FILE *file;
+    long int size;
+    char* result;
+
+    if (!(file = fopen(filename, "rb"))) return NULL;
+
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fseek(file, 0, SEEK_SET);
+
+    if (!(result = (char *)malloc(size + 1)))
+    {
+        fclose(file);
+        return NULL;
+    }
+
+    fread(result, 1, size, file);
+    result[size] = '\0';
+
+    fclose(file);
+
+    return result;
+}
+
+double GetSecMsecTime()
+{
+    SYSTEMTIME systemtime;
+
+    GetSystemTime(&systemtime);
+
+    return ((double)time(NULL)) + ((double)systemtime.wMilliseconds / 1000.0f);
 }

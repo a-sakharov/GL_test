@@ -1,5 +1,48 @@
+#include "core.h"
 #include "draw.h"
+#include <windows.h>
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+#include <gl\GL.h>
+#include "glext.h"
 
+
+#define LOADOPENGLPROC(type, name)\
+if (!(name = (type)wglGetProcAddress(#name)))\
+{\
+print_error("Cannot load opengl proc" #name);\
+exit(-1);\
+}
+
+#define LOADSHADERFROMFILE(destination, filename)\
+if (!(destination = LoadFromFile(filename)))\
+{\
+	print_error("Cannot load shader " filename);\
+	exit(-1);\
+}
+
+
+PFNGLSHADERSOURCEARBPROC glShaderSource;
+PFNGLCREATESHADERPROC glCreateShader;
+PFNGLCOMPILESHADERPROC glCompileShader;
+PFNGLATTACHSHADERPROC glAttachShader;
+PFNGLLINKPROGRAMPROC glLinkProgram;
+PFNGLDELETESHADERPROC glDeleteShader;
+PFNGLCREATEPROGRAMPROC  glCreateProgram;
+PFNGLGENVERTEXARRAYSPROC glGenVertexArrays;
+PFNGLBINDVERTEXARRAYAPPLEPROC glBindVertexArray;
+PFNGLCLEARBUFFERFVPROC glClearBufferfv;
+PFNGLUSEPROGRAMPROC glUseProgram;
+PFNGLDELETEVERTEXARRAYSPROC glDeleteVertexArrays;
+PFNGLDELETEPROGRAMPROC glDeleteProgram;
+PFNGLVERTEXATTRIB4FVPROC glVertexAttrib4fv;
+PFNGLPATCHPARAMETERIPROC glPatchParameteri;
+PFNGLDETACHSHADERPROC glDetachShader;
+PFNGLGETSTRINGIPROC glGetStringi;
+
+GLuint rendering_program;
+GLuint vertex_array_object;
 
 void init()
 {
@@ -147,39 +190,4 @@ void cleanup()
 {
 	glDeleteVertexArrays(1, &vertex_array_object);
 	glDeleteProgram(rendering_program);				//тут зависает при выключении
-}
-
-GLchar *LoadFromFile(char *filename)
-{
-	FILE *file;
-	long int size;
-	GLchar* result;
-
-	if (!(file = fopen(filename, "rb"))) return NULL;
-
-	fseek(file, 0, SEEK_END);
-	size = ftell(file);
-	fseek(file, 0, SEEK_SET);
-
-	if (!(result = (GLchar *)malloc(size + 1)))
-	{
-		fclose(file);
-		return NULL;
-	}
-
-	fread(result, 1, size, file);
-	result[size] = '\0';
-
-	fclose(file);
-
-	return result;
-}
-
-double GetSecMsecTime()
-{
-	SYSTEMTIME systemtime;
-	
-	GetSystemTime(&systemtime);
-
-	return ((double)time(NULL)) + ((double)systemtime.wMilliseconds / 1000.0f);
 }
